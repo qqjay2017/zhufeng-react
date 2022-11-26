@@ -37,6 +37,18 @@ module.exports = {
     open:true,
     hot:true,// 开启热更新,
     compress:true ,// 开启服务器端的gzip压缩
+    proxy:{
+      "/jian":{
+        // 代理的真正地址
+        target:"https://www.jianshu.com/asimov",
+        // 修改请求头中的origin源信息
+        changeOrigin:true,
+        // 支持webSocket通信机制
+        ws:true,
+        // 地址重写,主要用于区分不同代理的 前缀,从最后请求的真正地址中移除掉
+        pathRewrite:{"/jian":""}
+      }
+    }
 
 
   },
