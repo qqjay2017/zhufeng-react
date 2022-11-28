@@ -36,14 +36,12 @@ module.exports = {
     filename: "[name].[hash:8].js",
     path: path.resolve(__dirname, "dist"),
   },
-
-  plugins: [
-    new CleanWebpackPlugin(),
-    ...htmlPlugins,
-    new MiniCssExtractPlugin({
-      filename: isEnvProduction ? "[name].[contenthash].css" : "[name].css",
-    }),
-  ],
+  //解析器
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
   devServer: {
     host: "127.0.0.1",
     port: 3000,
@@ -65,7 +63,7 @@ module.exports = {
   },
   /**
    * LOADER加载器
-   * 
+   *
    * 执行顺序: 下=>上,从右到左
    */
   module: {
@@ -86,21 +84,52 @@ module.exports = {
         use: {
           loader: "babel-loader",
           options: {
-            presets: ['@babel/preset-env']
-          }
+            presets: ["@babel/preset-env"],
+          },
         },
-        include:path.resolve(__dirname,"src"),
-        exclude:/node_modules/
-      }
+        include: path.resolve(__dirname, "src"),
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        type: "javascript/auto", // webpack5需要的
+        use: [
+          {
+            // 把指定大小内的图片转base64
+            loader: "url-loader",
+            options: {
+              // 小于200kb,转base64
+              limit: 200 * 1024,
+              // 支持esModule
+              esModule: false,
+              // 大于200kb,没有base64,编译输出的位置
+              name: "images/[name].[hash].[ext]",
+            },
+          },
+        ],
+      },
     ],
   },
+  plugins: [
+    new CleanWebpackPlugin(),
+    ...htmlPlugins,
+    new MiniCssExtractPlugin({
+      filename: isEnvProduction ? "[name].[contenthash].css" : "[name].css",
+    }),
+  ],
   // 优化项
   optimization: {
     minimizer: [
       // For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
       // `...`,
       new CssMinimizerPlugin(),
-     new  TerserPlugin()
+      new TerserPlugin(),
     ],
+  },
+  // 设置打包的最大资源的大小
+  // https://webpack.docschina.org/configuration/performance/
+  performance: {
+    maxAssetSize: 100 * 1024 * 1024,
+    maxEntrypointSize: 100 * 1024 * 1024,
   },
 };
