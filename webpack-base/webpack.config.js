@@ -6,7 +6,8 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 const isEnvProduction = process.env.NODE_ENV === "production";
 const isEnvDevelopment = process.env.NODE_ENV === "development";
 const pageArr = ["index", "login"],
@@ -64,6 +65,7 @@ module.exports = {
   },
   /**
    * LOADER加载器
+   * 
    * 执行顺序: 下=>上,从右到左
    */
   module: {
@@ -78,6 +80,27 @@ module.exports = {
           "less-loader",
         ],
       },
+      {
+        test: /\.m?js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ['@babel/preset-env']
+          }
+        },
+        include:path.resolve(__dirname,"src"),
+        exclude:/node_modules/
+      }
+    ],
+  },
+  // 优化项
+  optimization: {
+    minimizer: [
+      // For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
+      // `...`,
+      new CssMinimizerPlugin(),
+     new  TerserPlugin()
     ],
   },
 };

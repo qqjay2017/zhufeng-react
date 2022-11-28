@@ -1,3 +1,4 @@
+import "@babel/polyfill"
 import sum from './A'
 import average from './B'
 
@@ -6,3 +7,10 @@ import './index.less'
 
 console.log(sum(10, 20, 30, 40));
 console.log(average(10, 20, 30, 40));
+
+const fn = ()=>{
+    console.log(fn());
+}
+fn()
+
+new Promise(()=>{})
