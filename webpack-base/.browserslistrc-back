@@ -1,0 +1,10 @@
+# 注释是这样写的，以#号开头
+last 1 version
+> 1%
+maintained node versions
+last 2 version
+
+not dead
+
+兼容ie9
+not ie<=8

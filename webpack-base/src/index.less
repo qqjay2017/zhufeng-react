@@ -1,0 +1,19 @@
+@R :red;
+
+html,body {
+    height: 100%;
+    overflow: hidden;
+    background: lightblue;
+}
+
+#app {
+    display: flex;
+    font-size: 20px;
+    a {
+        color: @R;
+        transition: color .3s;
+        &:hover {
+            color: darken(@R,20%);
+        }
+    }
+}
