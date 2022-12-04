@@ -32,3 +32,9 @@ key
 ```
 
 ## 创建真实dom
+
+基于ReactDom的render方法处理
+```
+
+
+```
